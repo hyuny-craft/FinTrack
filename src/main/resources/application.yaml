@@ -19,3 +19,7 @@ spring:
 logging:
   level:
     org.springdoc: TRACE
+
+jwt:
+  secret: 7dGYq3vKvMSxYhoDwrrBsESJwkPDwT8NsYctLQKzd/Q=
+  expiration-ms: 3600000
