@@ -1,5 +1,6 @@
 package com.fintrack.dto;
 
+import com.fintrack.domain.model.ExpenseCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ public class ExpenseRequest {
 
     @Schema(description = "카테고리", example = "식비")
     @NotNull
-    private String category;
+    private ExpenseCategory category;
 
     @Schema(description = "지출 설명", example = "점심 도시락")
     private String description;

@@ -1,11 +1,11 @@
-package com.fintrack.adapter;
+package com.fintrack.controller;
 
-import com.fintrack.application.ExpenseService;
-import com.fintrack.application.UserService;
 import com.fintrack.domain.model.Expense;
 import com.fintrack.domain.model.User;
 import com.fintrack.dto.ExpenseListResponse;
 import com.fintrack.dto.ExpenseRequest;
+import com.fintrack.service.ExpenseService;
+import com.fintrack.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,14 +34,9 @@ public class ExpenseController {
             @ApiResponse(responseCode = "200", description = "지출 등록 성공"),
             @ApiResponse(responseCode = "400", description = "입력값 오류")
     })
-    public ResponseEntity<Expense> add(@RequestBody @Valid ExpenseRequest request) {
+    public ResponseEntity<Expense> save(@RequestBody @Valid ExpenseRequest request) {
         User user = userService.findByEmail(request.getEmail());
-        return ResponseEntity.ok(expenseService.add(Expense.builder()
-                .amount(request.getAmount())
-                .user(user)
-                .date(LocalDate.now())
-                .description(request.getDescription())
-                .build()));
+        return ResponseEntity.ok(expenseService.save(user, request));
     }
 
     @GetMapping("/{email}")

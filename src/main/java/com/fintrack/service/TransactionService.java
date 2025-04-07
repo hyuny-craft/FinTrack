@@ -1,12 +1,12 @@
-package com.fintrack.application;
+package com.fintrack.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.fintrack.domain.model.Transaction;
 import com.fintrack.domain.model.TransactionType;
 import com.fintrack.domain.model.User;
 import com.fintrack.domain.repository.TransactionRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

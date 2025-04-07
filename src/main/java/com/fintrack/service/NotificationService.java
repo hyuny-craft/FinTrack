@@ -1,11 +1,11 @@
-package com.fintrack.application;
+package com.fintrack.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.fintrack.domain.model.Notification;
 import com.fintrack.domain.model.User;
 import com.fintrack.domain.repository.NotificationRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;

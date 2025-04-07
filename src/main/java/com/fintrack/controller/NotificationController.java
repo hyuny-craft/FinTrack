@@ -1,9 +1,9 @@
-package com.fintrack.adapter;
+package com.fintrack.controller;
 
-import com.fintrack.application.NotificationService;
-import com.fintrack.application.UserService;
 import com.fintrack.domain.model.Notification;
 import com.fintrack.domain.model.User;
+import com.fintrack.service.NotificationService;
+import com.fintrack.service.UserService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

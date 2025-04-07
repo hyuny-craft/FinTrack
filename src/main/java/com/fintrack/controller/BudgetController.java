@@ -1,11 +1,11 @@
-package com.fintrack.adapter;
+package com.fintrack.controller;
 
-import com.fintrack.application.BudgetService;
-import com.fintrack.application.UserService;
 import com.fintrack.domain.model.Budget;
 import com.fintrack.domain.model.User;
 import com.fintrack.dto.BudgetRequest;
 import com.fintrack.dto.BudgetUsageResponse;
+import com.fintrack.service.BudgetService;
+import com.fintrack.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;

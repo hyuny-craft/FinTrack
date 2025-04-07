@@ -1,13 +1,13 @@
-package com.fintrack.adapter;
+package com.fintrack.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.fintrack.application.TransactionService;
-import com.fintrack.application.UserService;
 import com.fintrack.domain.model.Transaction;
 import com.fintrack.domain.model.TransactionType;
 import com.fintrack.domain.model.User;
+import com.fintrack.service.TransactionService;
+import com.fintrack.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

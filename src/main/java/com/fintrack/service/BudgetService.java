@@ -1,4 +1,4 @@
-package com.fintrack.application;
+package com.fintrack.service;
 
 import com.fintrack.domain.model.Budget;
 import com.fintrack.domain.model.Expense;

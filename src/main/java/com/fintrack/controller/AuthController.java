@@ -1,9 +1,9 @@
-package com.fintrack.adapter;
+package com.fintrack.controller;
 
-import com.fintrack.application.AuthService;
 import com.fintrack.dto.JwtToken;
 import com.fintrack.dto.LoginRequest;
 import com.fintrack.dto.SignUpRequest;
+import com.fintrack.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
