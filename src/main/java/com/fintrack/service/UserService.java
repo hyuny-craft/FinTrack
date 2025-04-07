@@ -3,6 +3,7 @@ package com.fintrack.service;
 import com.fintrack.domain.model.Role;
 import com.fintrack.domain.model.User;
 import com.fintrack.domain.repository.UserRepository;
+import com.fintrack.dto.UserUpdateRequest;
 import com.fintrack.global.exception.DuplicateResourceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,5 +31,11 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Email not found"));
+    }
+
+    @Transactional
+    public void updateUser(UserUpdateRequest request) {
+        User user = findByEmail(request.getEmail());
+        user.setName(request.getName());
     }
 }

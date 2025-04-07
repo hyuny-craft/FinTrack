@@ -4,6 +4,7 @@ import com.fintrack.domain.model.Expense;
 import com.fintrack.domain.model.User;
 import com.fintrack.dto.ExpenseListResponse;
 import com.fintrack.dto.ExpenseRequest;
+import com.fintrack.dto.ExpenseStatisticsResponse;
 import com.fintrack.service.ExpenseService;
 import com.fintrack.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -83,5 +85,12 @@ public class ExpenseController {
                 ))
                 .toList();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<List<ExpenseStatisticsResponse>> getStatistics(@RequestParam String email,
+                                                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth month) {
+        User user = userService.findByEmail(email);
+        return ResponseEntity.ok(expenseService.getStatisticsByCategory(user, month));
     }
 }
