@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse("INTERNAL_ERROR", "서버 에러가 발생했습니다."));
+                .body(new ErrorResponse("INTERNAL_ERROR", e.getMessage()));
     }
 
     public record ErrorResponse(String code, String message) {

@@ -2,9 +2,11 @@ package com.fintrack.controller;
 
 import com.fintrack.dto.JwtToken;
 import com.fintrack.dto.LoginRequest;
-import com.fintrack.dto.UserRequest;
 import com.fintrack.service.AuthService;
 import com.fintrack.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +22,13 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@RequestBody @Valid UserRequest request) {
-        userService.register(request);
-        return ResponseEntity.ok().build();
-    }
-
+    @Operation(summary = "로그인")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "409", description = "이메일 중복"),
+            @ApiResponse(responseCode = "400", description = "입력값 오류"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
     @PostMapping("/login")
     public ResponseEntity<JwtToken> login(@RequestBody @Valid LoginRequest request) {
         JwtToken token = authService.login(request);
