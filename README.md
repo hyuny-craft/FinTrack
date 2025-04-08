@@ -1,43 +1,105 @@
-# 📌 개인 금융 관리 서비스 - 도메인 모델 설계 (DDD 기반, 학습용)
+# FinTrack
 
-1️⃣ 프로젝트 개요
-프로젝트명: 개인 금융 관리 서비스  
-목적: 사용자의 소비 패턴을 분석하고 예산을 효과적으로 관리하는 서비스  
-아키텍처: DDD (도메인 주도 설계) + 헥사고날 아키텍처
+FinTrack는 개인 금융 관리를 위한 서비스로, 지출 추적, 예산 설정, 알림 관리, 외부 이체 내역 시각화 등의 기능을 제공합니다.  
+이 프로젝트는 **DDD + 헥사고날 아키텍처** 기반으로 구성되었으며,  
+최신 Spring Boot 환경(Java 21, Spring Boot 3.4.3)을 활용해 구현되었습니다.
 
-목적: 신기술 보완
+---
 
-- 최신 기술 스택(Java 17~21, Spring Boot, JPA 등)
-- 코드 레벨의 설계 능력 향상(DDD, 아키텍처 패턴 등)
+## 📦 기술 스택
 
-2️⃣ 도메인 모델
-개인 금융 관리 서비스는 다음과 같은 주요 도메인으로 구성됩니다.
+- Java 21
+- Spring Boot 3.4.3
+- Spring Security (JWT + OAuth2)
+- JPA (Hibernate)
+- PostgreSQL (개발 중 H2 사용)
+- Swagger (Springdoc OpenAPI 2.8.5)
+- Gradle
+- OAuth2 (Google)
 
-# 📌 핵심 도메인
+---
 
-도메인 설명
-User 사용자의 계정 정보 및 인증 관리
-Budget 사용자의 월별 예산 설정 및 관리
-Expense 사용자의 소비 내역 기록
-Transaction 은행 거래 내역 자동 수집
-Category 소비 내역의 카테고리 분류
-Notification 예산 초과 및 소비 패턴 알림 시스템
+## 📁 프로젝트 구조 (레이어드 아키텍처)
 
-# 대시보드 기능 설계 및 구현
+추후 헥사고날 반영 예정
 
-- 사용자의 예산(Budget)과 지출(Expense)을 한 번에 보여주는 통합 API
-- 향후 월별 요약, 카테고리별 통계 기반 기능으로 확장 가능
+```
+com.fintrack
+├── application       # 서비스 로직
+├── controller        # API 컨트롤러
+├── domain
+│   ├── model         # 엔티티, 도메인 객체
+│   └── repository    # JPA Repository 인터페이스
+├── dto               # Request/Response DTO
+├── security          # JWT, 필터, SecurityConfig
+└── util              # 유틸, 헬퍼 등
+```
 
-# 알림 로직 자동화 (예산 초과 감지)
+---
 
-- 사용자가 한 달 예산을 초과하면 자동으로 알림 전송
-- 조건: Expense 총합 > Budget.totalBudget
+## ✨ 주요 기능 요약
 
-# 카테고리별 통계 기능
+### ✅ 사용자 (User)
 
-- 사용자의 한 달 지출을 카테고리별로 집계하여 통계 제공
+- 일반 회원가입 (`/api/users/register`)
+- 소셜 로그인시 자동 등록
+- 이메일 중복 확인 및 이메일 기반 조회
 
-# 유저 프로필 조회 및 수정
+### ✅ 인증/인가 (Auth)
 
-- 사용자의 이메일 기반 정보 조회
-- 사용자 이름 등의 정보 수정 API 제공
+- 로그인 (JWT 토큰 발급)
+- JWT 인증 필터, 토큰 유효성 검사
+- OAuth2 연동 (구글)
+- OAuth2 SuccessHandler → JWT 자동 발급 및 응답
+
+### ✅ 지출 (Expense)
+
+- 지출 등록 (`POST /api/expenses`)
+- 기간별/사용자별 조회 (`GET /api/expenses` with query param)
+
+### ✅ 알림 (Notification)
+
+- 알림 전송 (`POST /api/notifications`)
+- 사용자별 알림 조회 (`GET /api/notifications/{email}`)
+
+### ✅ 외부 이체 내역 (TransferHistory)
+
+- 외부 API 호출 기반 이체 내역 수집 (준비 중)
+- 자기자금 간 이체 필터링 및 시각화
+
+---
+
+## 🔒 보안
+
+- 비로그인 사용자 접근 제한 (일부 API 제외)
+- dev 환경에서만 Swagger UI 접근 허용
+- `.env` 파일을 통해 OAuth2 client-secret 관리
+
+---
+
+## 🚀 실행 방법
+
+추후 제공
+
+---
+
+## 🧪 테스트
+
+- H2 DB 기반 단위 테스트
+- Swagger UI (`http://localhost:8080/swagger-ui/index.html`)로 직접 API 테스트 가능 (dev 환경 한정)
+
+---
+
+## 🛠 향후 계획
+
+- 예산 도메인 기능 구현
+- 알림 스케줄링 (매월 고정지출 알림 등)
+- OAuth2 인증 흐름 개선 및 보안 강화
+- 사용자 설정 기능 추가
+- 데이터 통계 대시보드
+
+---
+
+## 🙌 기여
+
+PR 환영합니다. 사전 이슈 등록 후 커밋 부탁드립니다.
