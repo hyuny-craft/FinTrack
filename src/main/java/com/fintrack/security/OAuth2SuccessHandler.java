@@ -1,6 +1,7 @@
 package com.fintrack.security;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String token = jwtProvider.createToken(email, "USER");
         log.info("create token {}", email);
+        Cookie cookie = new Cookie("accessToken", token);
+
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write("""
                     {
                       "token": "%s"
                     }
                 """.stripIndent().formatted(token));
+        response.addCookie(cookie);
     }
 }
