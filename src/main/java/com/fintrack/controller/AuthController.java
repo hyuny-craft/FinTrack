@@ -2,8 +2,9 @@ package com.fintrack.controller;
 
 import com.fintrack.dto.JwtToken;
 import com.fintrack.dto.LoginRequest;
-import com.fintrack.dto.SignUpRequest;
+import com.fintrack.dto.UserRequest;
 import com.fintrack.service.AuthService;
+import com.fintrack.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@RequestBody @Valid SignUpRequest request) {
-        authService.register(request);
+    public ResponseEntity<Void> signup(@RequestBody @Valid UserRequest request) {
+        userService.register(request);
         return ResponseEntity.ok().build();
     }
 
@@ -29,4 +31,6 @@ public class AuthController {
         JwtToken token = authService.login(request);
         return ResponseEntity.ok(token);
     }
+
+
 }

@@ -27,7 +27,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest request) {
-        User user = userService.register(request.getEmail(), request.getPassword(), request.getName());
+        User user = userService.register(request);
         UserResponse response = new UserResponse(user.getId(), user.getEmail(), user.getName(), user.getRole());
         return ResponseEntity.ok(response);
     }

@@ -15,7 +15,16 @@ spring:
         format_sql: true
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${OAUTH_GOOGLE_CLIENT_ID:default-client-id}
+            client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET:default-client-secret}
+            scope:
+              - email
+              - profile
 logging:
   level:
     org.springdoc: TRACE

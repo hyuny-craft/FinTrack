@@ -3,6 +3,7 @@ package com.fintrack.service;
 import com.fintrack.domain.model.Role;
 import com.fintrack.domain.model.User;
 import com.fintrack.domain.repository.UserRepository;
+import com.fintrack.dto.UserRequest;
 import com.fintrack.dto.UserUpdateRequest;
 import com.fintrack.global.exception.DuplicateResourceException;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User register(String email, String rawPassword, String name) {
-        if (userRepository.existsByEmail(email)) {
+    public User register(UserRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateResourceException("이미 등록된 이메일입니다.");
         }
 
-        User user = new User(email, passwordEncoder.encode(rawPassword), name, Role.USER, LocalDateTime.now());
+        User user = User.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .name(request.getName())
+                .role(Role.USER)
+                .createdAt(LocalDateTime.now())
+                .build();
 
         return userRepository.save(user);
     }
@@ -38,4 +45,6 @@ public class UserService {
         User user = findByEmail(request.getEmail());
         user.setName(request.getName());
     }
+
+
 }
