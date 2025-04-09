@@ -7,6 +7,7 @@ import com.fintrack.domain.model.User;
 import com.fintrack.domain.repository.BudgetRepository;
 import com.fintrack.domain.repository.ExpenseRepository;
 import com.fintrack.domain.repository.NotificationRepository;
+import com.fintrack.dto.BudgetUsageRateResponse;
 import com.fintrack.dto.BudgetUsageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -78,5 +79,14 @@ public class BudgetService {
         }
 
         return new BudgetUsageResponse(month.toString(), totalBudget, totalExpense, percentage);
+    }
+
+    public BudgetUsageRateResponse calculateUsageRate(String email, YearMonth yearMonth) {
+        BigDecimal budgetAmount = budgetRepository.findByUserEmailAndMonth(email, yearMonth);
+        BigDecimal spentAmount = expenseRepository.sumByUserAndMonth(email, yearMonth);
+
+        double usageRate = BigDecimal.ZERO.equals(budgetAmount) ? 0.0 :
+                spentAmount.divide(budgetAmount, 4, RoundingMode.HALF_UP).doubleValue() * 100;
+        return new BudgetUsageRateResponse(budgetAmount, spentAmount, usageRate, yearMonth);
     }
 }

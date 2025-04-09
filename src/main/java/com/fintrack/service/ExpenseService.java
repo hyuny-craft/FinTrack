@@ -5,14 +5,16 @@ import com.fintrack.domain.model.ExpenseCategory;
 import com.fintrack.domain.model.User;
 import com.fintrack.domain.repository.BudgetRepository;
 import com.fintrack.domain.repository.ExpenseRepository;
-import com.fintrack.dto.ExpenseRequest;
-import com.fintrack.dto.ExpenseStatisticsResponse;
+import com.fintrack.domain.repository.UserRepository;
+import com.fintrack.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
@@ -26,6 +28,7 @@ public class ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final BudgetRepository budgetRepository;
     private final NotificationService notificationService;
+    private final UserRepository userRepository;
 
     @Transactional
     public Expense save(User user, ExpenseRequest request) {
@@ -79,4 +82,53 @@ public class ExpenseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public TotalExpenseResponse getTotalExpense(String email, YearMonth yearMonth) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        BigDecimal total = expenseRepository.findTotalAmountByUserAndMonth(user, yearMonth.getYear(), yearMonth.getMonthValue());
+        return new TotalExpenseResponse(total, yearMonth);
+    }
+
+    @Transactional(readOnly = true)
+    public ExpenseMonthlyResponse calculateMonthlyExpense(String email, YearMonth yearMonth) {
+        List<ExpenseMonthlyResponse.ExpenseMonthlyItem> items = expenseRepository
+                .findByUserEmailAndDateBetween(email, yearMonth.minusMonths(5).atDay(1), yearMonth.atEndOfMonth());
+        return new ExpenseMonthlyResponse(items);
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryRatioResponse calculateCategoryRatio(String email, YearMonth yearMonth) {
+        BigDecimal total = expenseRepository.sumByUserEmailAndDateBetween(email, yearMonth.atDay(1), yearMonth.atEndOfMonth());
+        if (total.compareTo(BigDecimal.ZERO) == 0) {
+            return new CategoryRatioResponse(List.of());
+        }
+
+        List<CategoryRatioResponse.CategoryRatioItem> items = expenseRepository.findExpenseCategoryItems(email, yearMonth)
+                .stream()
+                .map(row -> new CategoryRatioResponse.CategoryRatioItem(
+                        row.category(),
+                        row.amount(),
+                        row.amount().divide(total, 4, RoundingMode.HALF_UP).doubleValue() * 100
+                ))
+                .toList();
+        return new CategoryRatioResponse(items);
+    }
+
+    @Transactional(readOnly = true)
+    public WeeklyExpenseTrendResponse getWeeklyTrend(String email) {
+        LocalDate today = LocalDate.now();
+        LocalDate weekAgo = today.minusDays(6);
+        List<WeeklyExpenseTrendResponse.DailExpense> dailyExpenses = expenseRepository
+                .findExpenseDailyItems(email, weekAgo, today)
+                .stream()
+                .map(row -> new WeeklyExpenseTrendResponse.DailExpense(
+                        row.date(),
+                        row.amount()
+                ))
+                .toList();
+
+        return new WeeklyExpenseTrendResponse(dailyExpenses);
+    }
 }

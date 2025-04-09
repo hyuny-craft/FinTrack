@@ -1,13 +1,14 @@
 package com.fintrack.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
 
-import java.math.BigDecimal;
-
-@Getter
-@AllArgsConstructor
-public class DashboardResponse {
-    private BigDecimal totalBudget;
-    private BigDecimal totalExpense;
+@Builder
+public record DashboardResponse(
+        TotalExpenseResponse totalExpense,
+        ExpenseMonthlyResponse monthlyExpense,
+        CategoryRatioResponse categoryRatio,
+        BudgetUsageRateResponse budgetUsageRate,
+        WeeklyExpenseTrendResponse weeklyExpenseTrend,
+        BalanceFlowResponse balanceFlow
+) {
 }
