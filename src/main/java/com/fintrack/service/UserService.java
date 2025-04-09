@@ -46,5 +46,11 @@ public class UserService {
         user.setName(request.getName());
     }
 
+    @Transactional
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Email not found"));
+        userRepository.delete(user);
+    }
+
 
 }

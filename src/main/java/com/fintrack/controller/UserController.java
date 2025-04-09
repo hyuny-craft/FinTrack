@@ -75,4 +75,10 @@ public class UserController {
         userService.updateUser(req);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal UserDetails principal) {
+        userService.deleteUser(principal.getUsername());
+        return ResponseEntity.noContent().build();
+    }
 }
