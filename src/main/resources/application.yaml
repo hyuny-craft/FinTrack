@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: FinTrack
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${OAUTH_GOOGLE_CLIENT_ID:default-client-id}
+            client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET:default-client-secret}
+            scope:
+              - email
+              - profile
+logging:
+  level:
+    org.springdoc: TRACE
+
+jwt:
+  secret: 7dGYq3vKvMSxYhoDwrrBsESJwkPDwT8NsYctLQKzd/Q=
+  expiration-ms: 3600000
