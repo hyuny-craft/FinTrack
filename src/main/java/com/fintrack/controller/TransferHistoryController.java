@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransferHistoryController {
     private final TransferHistoryService transferHistoryService;
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestParam String email,

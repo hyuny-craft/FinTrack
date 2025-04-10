@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 public class TransferHistoryRequest {
@@ -14,7 +14,7 @@ public class TransferHistoryRequest {
     private BigDecimal amount;
 
     @NotNull
-    private LocalDateTime date;
+    private LocalDate date;
 
     @NotNull
     private TransferType type;

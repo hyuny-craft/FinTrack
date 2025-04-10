@@ -30,13 +30,13 @@ public class BudgetService {
 
     @Transactional
     public Budget create(User user, YearMonth month, BigDecimal totalBudget) {
-        Budget budget = new Budget(user, month, totalBudget, LocalDateTime.now());
+        Budget budget = new Budget(user, LocalDate.of(month.getYear(), month.getMonthValue(), 1), totalBudget, LocalDateTime.now());
         return budgetRepository.save(budget);
     }
 
     @Transactional(readOnly = true)
     public Budget getByUserAndMonth(User user, YearMonth month) {
-        return budgetRepository.findByUserAndMonth(user, month).orElseThrow(() -> new IllegalArgumentException("Month not found"));
+        return budgetRepository.findByUserAndDateBetween(user, month.atDay(1), month.atEndOfMonth()).orElseThrow(() -> new IllegalArgumentException("Month not found"));
     }
 
     @Transactional(readOnly = true)
@@ -48,7 +48,7 @@ public class BudgetService {
     @Transactional(readOnly = true)
     public BudgetUsageResponse getBudgetUsage(String email, YearMonth month) {
         User user = userService.findByEmail(email);
-        BigDecimal totalBudget = budgetRepository.findByUserAndMonth(user, month)
+        BigDecimal totalBudget = budgetRepository.findByUserAndDateBetween(user, month.atDay(1), month.atEndOfMonth())
                 .map(Budget::getTotalBudget)
                 .orElse(BigDecimal.ZERO);
 
@@ -85,7 +85,7 @@ public class BudgetService {
     public BudgetUsageRateResponse calculateUsageRate(String email, YearMonth yearMonth) {
         LocalDate start = yearMonth.atDay(1);
         LocalDate end = yearMonth.atEndOfMonth();
-        BigDecimal budgetAmount = budgetRepository.findByUserEmailAndMonth(email, yearMonth);
+        BigDecimal budgetAmount = budgetRepository.findByUserEmailAndDateBetween(email, start, end);
         BigDecimal spentAmount = expenseRepository.sumAmountByUserEmailAndDateBetween(email, start, end);
 
         double usageRate = BigDecimal.ZERO.equals(budgetAmount) ? 0.0 :

@@ -44,7 +44,7 @@ public class ExpenseService {
 
         // 예산 초과 감지 및 알림 전송
         YearMonth month = YearMonth.from(expense.getDate());
-        budgetRepository.findByUserAndMonth(user, month).ifPresent(budget -> {
+        budgetRepository.findByUserAndDateBetween(user, month.atDay(1), month.atEndOfMonth()).ifPresent(budget -> {
             BigDecimal totalExpense = expenseRepository.findByUserAndDateBetween(
                     user, month.atDay(1), month.atEndOfMonth()
             ).stream().map(Expense::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -98,7 +98,19 @@ public class ExpenseService {
     public ExpenseMonthlyResponse calculateMonthlyExpense(String email, YearMonth yearMonth) {
         List<ExpenseMonthlyResponse.ExpenseMonthlyItem> items = expenseRepository
                 .findByUserEmailAndDateBetween(email, yearMonth.minusMonths(5).atDay(1), yearMonth.atEndOfMonth())
-                .stream().map(row -> new ExpenseMonthlyResponse.ExpenseMonthlyItem(YearMonth.of(row.getDate().getYear(), row.getDate().getMonth()), row.getAmount()))
+                .stream()
+                .collect(Collectors.groupingBy(
+                        e -> YearMonth.from(e.getDate()),
+                        Collectors.reducing(
+                                BigDecimal.ZERO,
+                                Expense::getAmount,
+                                BigDecimal::add
+                        )
+                ))
+                .entrySet().stream()
+                .map(row -> new ExpenseMonthlyResponse.ExpenseMonthlyItem(
+                        row.getKey(),
+                        row.getValue()))
                 .collect(Collectors.toList());
         return new ExpenseMonthlyResponse(items);
     }

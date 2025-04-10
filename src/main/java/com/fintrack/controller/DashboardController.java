@@ -1,9 +1,7 @@
 package com.fintrack.controller;
 
-import com.fintrack.dto.DashboardResponse;
-import com.fintrack.dto.ExpenseMonthlyResponse;
-import com.fintrack.dto.TotalExpenseResponse;
-import com.fintrack.dto.WeeklyExpenseTrendResponse;
+import com.fintrack.dto.*;
+import com.fintrack.service.BalanceService;
 import com.fintrack.service.DashboardService;
 import com.fintrack.service.ExpenseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +26,7 @@ import java.time.YearMonth;
 public class DashboardController {
     private final DashboardService dashboardService;
     private final ExpenseService expenseService;
+    private final BalanceService balanceService;
 
     @Operation(summary = "대시보드 요약 정보 조회", description = "월별 지출, 예산 대비 지출률, 카테고리별 비율 등을 포함")
     @GetMapping
@@ -64,12 +63,12 @@ public class DashboardController {
         return ResponseEntity.ok(expenseService.getWeeklyTrend(userDetails.getUsername()));
     }
 
-//    @Operation(summary = "총 잔액 흐름 조회", description = "월별 입출금 차이를 통해 총 잔액 흐름을 확인")
-//    @GetMapping("/balance-flow")
-//    public ResponseEntity<BalanceFlowResponse> getBalanceFlow(
-//            @AuthenticationPrincipal UserDetails userDetails,
-//            @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth start,
-//            @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth end) {
-//        return ResponseEntity.ok(balanceService.getBalanceFlow(userDetails.getUsername(), start, end));
-//    }
+    @Operation(summary = "총 잔액 흐름 조회", description = "월별 입출금 차이를 통해 총 잔액 흐름을 확인")
+    @GetMapping("/balance-flow")
+    public ResponseEntity<BalanceFlowResponse> getBalanceFlow(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth start,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth end) {
+        return ResponseEntity.ok(balanceService.getBalanceFlow(userDetails.getUsername(), start, end));
+    }
 }

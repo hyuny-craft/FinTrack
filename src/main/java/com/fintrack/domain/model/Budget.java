@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 
 @Schema(hidden = true)
 @Entity
@@ -23,8 +23,8 @@ public class Budget {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false, name = "`month`")
-    private YearMonth month;
+    @Column(nullable = false)
+    private LocalDate date;
 
     @Column(nullable = false)
     private BigDecimal totalBudget;
@@ -33,9 +33,9 @@ public class Budget {
     private LocalDateTime createdAt;
 
     @Builder
-    public Budget(User user, YearMonth month, BigDecimal totalBudget, LocalDateTime createdAt) {
+    public Budget(User user, LocalDate date, BigDecimal totalBudget, LocalDateTime createdAt) {
         this.user = user;
-        this.month = month;
+        this.date = date;
         this.totalBudget = totalBudget;
         this.createdAt = createdAt;
     }

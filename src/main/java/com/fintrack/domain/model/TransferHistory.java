@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -24,7 +24,7 @@ public class TransferHistory {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -37,7 +37,7 @@ public class TransferHistory {
     private String accountNumber;
 
     @Builder
-    public TransferHistory(User user, BigDecimal amount, LocalDateTime date, TransferType type, String bankName, String accountNumber) {
+    public TransferHistory(User user, BigDecimal amount, LocalDate date, TransferType type, String bankName, String accountNumber) {
         this.user = user;
         this.amount = amount;
         this.date = date;
