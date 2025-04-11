@@ -2,12 +2,16 @@ package com.fintrack.service;
 
 import com.fintrack.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DashboardService {
 
     private final ExpenseService expenseService;
@@ -32,4 +36,11 @@ public class DashboardService {
                 balanceFlow
         );
     }
+
+    @Cacheable(value = "summary", key = "#userId")
+    public String getSummary(Long userId) {
+        log.info("DB 또는 외부 호출 발생");
+        return "summary-" + userId + "-" + UUID.randomUUID();
+    }
+
 }

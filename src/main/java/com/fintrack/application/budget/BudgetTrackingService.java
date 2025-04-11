@@ -1,4 +1,4 @@
-package com.fintrack.service;
+package com.fintrack.application.budget;
 
 import com.fintrack.domain.model.Transaction;
 import com.fintrack.domain.model.TransactionType;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TransactionService {
+public class BudgetTrackingService {
     private final TransactionRepository transactionRepository;
 
     @Transactional

@@ -1,9 +1,9 @@
 package com.fintrack.controller;
 
+import com.fintrack.application.sync.ExternalTransferSyncService;
 import com.fintrack.domain.model.User;
 import com.fintrack.dto.TransferHistoryRequest;
 import com.fintrack.dto.TransferHistoryResponse;
-import com.fintrack.service.TransferHistoryService;
 import com.fintrack.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/transfers")
 @RequiredArgsConstructor
 public class TransferHistoryController {
-    private final TransferHistoryService transferHistoryService;
+    private final ExternalTransferSyncService transferHistoryService;
     private final UserService userService;
 
     @PostMapping

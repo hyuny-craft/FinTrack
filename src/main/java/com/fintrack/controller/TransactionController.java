@@ -1,9 +1,9 @@
 package com.fintrack.controller;
 
+import com.fintrack.application.budget.BudgetTrackingService;
 import com.fintrack.domain.model.Transaction;
 import com.fintrack.domain.model.TransactionType;
 import com.fintrack.domain.model.User;
-import com.fintrack.service.TransactionService;
 import com.fintrack.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/transactions")
 @RequiredArgsConstructor
 public class TransactionController {
-    private final TransactionService transactionService;
+    private final BudgetTrackingService transactionService;
     private final UserService userService;
 
     @PostMapping

@@ -1,4 +1,4 @@
-package com.fintrack.service;
+package com.fintrack.application.sync;
 
 import com.fintrack.domain.model.TransferHistory;
 import com.fintrack.domain.model.User;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TransferHistoryService {
+public class ExternalTransferSyncService {
     private final TransferHistoryRepository repository;
 
     public void save(User user, TransferHistoryRequest request) {
