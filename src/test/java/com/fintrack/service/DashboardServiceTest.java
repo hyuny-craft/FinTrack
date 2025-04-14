@@ -1,22 +1,38 @@
 package com.fintrack.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+//@RequiredArgsConstructor
+//@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class DashboardServiceTest {
-
+    @Autowired
     private DashboardService dashboardService;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
 
     @Test
-    void 호출할때마다_결과가_달라진다() {
-        String first = dashboardService.getSummary(1L);
-        String second = dashboardService.getSummary(1L);
+    void redisTemplate_기본동작_확인() {
+        redisTemplate.opsForValue().set("test-key", "hello");
+        Object value = redisTemplate.opsForValue().get("test-key");
+        System.out.println("value = " + value);
+        assertThat(value).isEqualTo("hello");
 
-        Assertions.assertThat(first).isEqualTo(second);
+    }
+
+    @Test
+    void redisCache_저장_검증() {
+        String summary = dashboardService.getSummary(1L);
+        System.out.println("summary = " + summary);
+        Object cached = redisTemplate.opsForValue().get("summary::1"); // default key format: cacheName::key
+        System.out.println("cached = " + cached);
+        assertThat(cached).isNotNull();
     }
 
 }
